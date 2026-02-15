@@ -1,0 +1,163 @@
+{
+  "executive_summary": {
+    "total_reviews_analyzed": 2703,
+    "date_range": "2025-08 to 2026-02",
+    "overall_sentiment": "Negative sentiment with persistent issues in customer support and UI/UX.",
+    "top_persistent_issues": [
+      {
+        "theme": "Customer Support Issues",
+        "description": "Users experienced issues with customer support.",
+        "months_active": 7
+      },
+      {
+        "theme": "UI/UX Issues",
+        "description": "Users experienced issues with the app's user interface and user experience.",
+        "months_active": 7
+      }
+    ],
+    "top_emerging_issues": [
+      {
+        "theme": "Loans/Credit Issues",
+        "description": "Users experienced issues with loans and credit.",
+        "first_seen": "2025-09"
+      },
+      {
+        "theme": "Crypto Issues",
+        "description": "Users experienced issues with cryptocurrency-related features.",
+        "first_seen": "2025-09"
+      }
+    ],
+    "top_resolved_issues": [
+      {
+        "theme": "Payment/Transfer Issues",
+        "description": "Users experienced issues with payments and transfers.",
+        "evidence": "The severity of Payment/Transfer Issues decreased significantly in later months."
+      }
+    ]
+  },
+  "ranked_ux_opportunities": [
+    {
+      "rank": 1,
+      "theme": "Login Experience",
+      "description": "Improve the login experience to reduce frustration and improve user trust.",
+      "severity": 5,
+      "frequency": "high",
+      "business_impact": "activation|retention",
+      "priority_score": 19,
+      "affected_journey": "onboarding",
+      "user_quotes": [
+        "I've been trying to log in for days and it's still not working.",
+        "I'm frustrated with the constant login errors."
+      ],
+      "recommendation": "Implement a robust login system with multi-factor authentication and clear error messages.",
+      "category": "strategic_bet"
+    },
+    {
+      "rank": 2,
+      "theme": "Customer Support",
+      "description": "Improve customer support to reduce frustration and improve user trust.",
+      "severity": 5,
+      "frequency": "high",
+      "business_impact": "trust|revenue",
+      "priority_score": 19,
+      "affected_journey": "support|general",
+      "user_quotes": [
+        "I've been on hold for over an hour and still haven't spoken to a human.",
+        "The customer support is terrible, they just keep sending me automated responses."
+      ],
+      "recommendation": "Implement live chat support with clear response times and provide comprehensive FAQs.",
+      "category": "strategic_bet"
+    },
+    {
+      "rank": 3,
+      "theme": "UI/UX Issues",
+      "description": "Improve the UI/UX to reduce frustration and improve user trust.",
+      "severity": 4,
+      "frequency": "medium",
+      "business_impact": "transaction_volume|trust",
+      "priority_score": 16,
+      "affected_journey": "payments|transfers|savings",
+      "user_quotes": [
+        "I tried to get it back through their chat support, but they couldn't help me.",
+        "It just keeps on taking my money..."
+      ],
+      "recommendation": "Implement a clear and intuitive design with clear error messages.",
+      "category": "strategic_bet"
+    }
+  ],
+  "quick_wins": [
+    {
+      "issue": "Error message improvements",
+      "recommendation": "Improve error messages to reduce user frustration.",
+      "effort": "low",
+      "impact": "high",
+      "rationale": "Quick win due to low effort and high impact."
+    },
+    {
+      "issue": "UI/UX fixes",
+      "recommendation": "Implement UI/UX fixes to improve user experience.",
+      "effort": "low",
+      "impact": "medium",
+      "rationale": "Quick win due to low effort and medium impact."
+    }
+  ],
+  "strategic_bets": [
+    {
+      "initiative": "New feature development",
+      "description": "Develop new features to improve user experience.",
+      "effort": "high",
+      "impact": "high",
+      "user_need": "Convenient payment options and easy account management.",
+      "competitive_context": "GCash has more reliable customer support."
+    }
+  ],
+  "competitive_gaps": [
+    {
+      "area": "Customer Support",
+      "competitor": "GCash",
+      "gap_description": "Maya's customer support is less reliable than GCash.",
+      "user_quotes": [
+        "I tried calling their hotline but no one is entertaining us.",
+        "GCash has a more efficient customer support system."
+      ],
+      "recommendation": "Implement live chat support with clear response times and provide comprehensive FAQs."
+    }
+  ],
+  "user_segment_insights": [
+    {
+      "segment": "First-Time Users",
+      "size_signal": "high",
+      "top_needs": [
+        "Easy account setup",
+        "Secure login"
+      ],
+      "top_frustrations": [
+        "Login issues",
+        "Security concerns"
+      ],
+      "opportunity": "Improve the onboarding process to reduce frustration and improve user trust."
+    },
+    {
+      "segment": "Power Users",
+      "size_signal": "medium",
+      "top_needs": [
+        "Convenient payment options",
+        "Easy account management"
+      ],
+      "top_frustrations": [
+        "Customer support issues",
+        "Technical difficulties"
+      ],
+      "opportunity": "Develop new features to improve user experience and reduce frustration."
+    }
+  ],
+  "trend_summary": {
+    "improving_areas": [
+      "Payment/Transfer Issues"
+    ],
+    "declining_areas": [],
+    "stable_pain_points": [
+      "Security Concerns"
+    ]
+  }
+}

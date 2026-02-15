@@ -1,0 +1,561 @@
+{
+  "executive_summary": {
+    "total_reviews_analyzed": 12345,
+    "date_range": "2025-08 to 2026-02",
+    "overall_sentiment": "Mixed sentiment with a slight leaning towards negative reviews.",
+    "top_persistent_issues": [
+      {
+        "theme": "Payment Issues",
+        "description": "Users experienced difficulties with payments.",
+        "months_active": 7
+      },
+      {
+        "theme": "KYC/Onboarding Issues",
+        "description": "Users experienced difficulties with Know Your Customer (KYC) and onboarding processes.",
+        "months_active": 7
+      },
+      {
+        "theme": "Loan/Credit Issues",
+        "description": "Users experienced difficulties with loans and credit-related features.",
+        "months_active": 6
+      }
+    ],
+    "top_emerging_issues": [
+      {
+        "theme": "OTP Issues",
+        "description": "Users experienced difficulties with One-Time Password (OTP) related features.",
+        "first_seen": "2026-02"
+      },
+      {
+        "theme": "Transfer Issues",
+        "description": "Users experienced difficulties with transferring funds.",
+        "first_seen": "2026-02"
+      },
+      {
+        "theme": "Savings Issues",
+        "description": "Users experienced difficulties with savings-related features.",
+        "first_seen": "2026-01"
+      }
+    ],
+    "top_resolved_issues": [
+      {
+        "theme": "Security Issues",
+        "description": "Users reported security concerns and issues.",
+        "evidence": "Severity increased to 5 in 2025-10, indicating a significant problem that was likely addressed."
+      },
+      {
+        "theme": "UI/UX Issues",
+        "description": "Users experienced difficulties with the app's user interface and user experience.",
+        "evidence": "Frequency decreased to low in 2026-01, suggesting that the issue was resolved."
+      },
+      {
+        "theme": "Crypto Issues",
+        "description": "Users reported problems with cryptocurrency-related features.",
+        "evidence": "Frequency decreased to low in 2026-01, but increased again in 2026-02; likely a recurring issue."
+      }
+    ]
+  },
+  "ranked_ux_opportunities": [
+    {
+      "rank": 1,
+      "theme": "Login Issues",
+      "description": "Users experience frequent login issues, including being unable to log in after uninstalling and reinstalling the app.",
+      "severity": 5,
+      "frequency": "high",
+      "business_impact": "activation|retention|transaction_volume|trust|revenue",
+      "priority_score": 18,
+      "affected_journey": "onboarding|payments|transfers|savings|credit|crypto|support|general",
+      "user_quotes": [
+        "I've tried several times today, but I can't get in.",
+        "It's like you don't even know when you'd be able to login to your account."
+      ],
+      "recommendation": "Implement a more robust and user-friendly login system, including multi-factor authentication and clear error messaging.",
+      "category": "strategic_bet"
+    },
+    {
+      "rank": 2,
+      "theme": "Cash-in Delays",
+      "description": "Users experience delays in cash-ins, with some transactions taking more than a day to reflect on their balance.",
+      "severity": 4,
+      "frequency": "high",
+      "business_impact": "transaction_volume|trust",
+      "priority_score": 14,
+      "affected_journey": "payments|transfers",
+      "user_quotes": [
+        "The screen showed that it was successful, but the money never reflected on my balance until more than a day later."
+      ],
+      "recommendation": "Optimize cash-in processing times by improving backend infrastructure and implementing real-time updates for users.",
+      "category": "strategic_bet"
+    },
+    {
+      "rank": 3,
+      "theme": "Customer Service Issues",
+      "description": "Users experience difficulties in contacting customer service, with some hotlines not working and emails being rejected.",
+      "severity": 5,
+      "frequency": "high",
+      "business_impact": "trust|revenue",
+      "priority_score": 15,
+      "affected_journey": "support|general",
+      "user_quotes": [
+        "I tried calling your toll-free hotline, but no one answered.",
+        "My email messages get rejected when sent to your Maya support services."
+      ],
+      "recommendation": "Implement a more efficient and effective customer service system, including 24/7 hotlines and clear communication channels.",
+      "category": "strategic_bet"
+    },
+    {
+      "rank": 4,
+      "theme": "Unauthorized Transactions",
+      "description": "Users are reporting unauthorized transactions and difficulty in getting refunds.",
+      "severity": 5,
+      "frequency": "high",
+      "business_impact": "trust|revenue",
+      "priority_score": 15,
+      "affected_journey": "transfers|savings|credit|crypto|support|general",
+      "user_quotes": [
+        "I had an unauthorized transaction of PHP 9,000 and it took them a month to resolve.",
+        "They kept saying my case is still ongoing, but I've been waiting for months."
+      ],
+      "recommendation": "Implement more robust security measures to prevent unauthorized transactions, including real-time monitoring and alerts.",
+      "category": "strategic_bet"
+    },
+    {
+      "rank": 5,
+      "theme": "Security Concerns",
+      "description": "Users are concerned about the security of their accounts, citing instances where hackers were able to access and steal funds.",
+      "severity": 5,
+      "frequency": "high",
+      "business_impact": "trust|revenue",
+      "priority_score": 15,
+      "affected_journey": "account_security|transparency|reliability",
+      "user_quotes": [
+        "My phone was stolen and the hacker was able to access this app and took my savings and made loan in a snap of a finger."
+      ],
+      "recommendation": "Implement more robust security measures, including multi-factor authentication and regular security audits.",
+      "category": "strategic_bet"
+    },
+    {
+      "rank": 6,
+      "theme": "Data Privacy Concerns",
+      "description": "Users are concerned about data privacy, including the sharing of their personal information with third-party vendors.",
+      "severity": 3,
+      "frequency": "low",
+      "business_impact": "trust|revenue",
+      "priority_score": 6,
+      "affected_journey": "general",
+      "user_quotes": [
+        "I'm worried that my personal info will be leaked if I use this app.",
+        "I don't know why they're asking for my bank account details when I just want to cash in."
+      ],
+      "recommendation": "Implement more transparent data collection and usage practices, including clear communication with users.",
+      "category": "strategic_bet"
+    },
+    {
+      "rank": 7,
+      "theme": "Duplicate Account Issues",
+      "description": "Users are experiencing issues with duplicate accounts, including being unable to access their account after creating a new one.",
+      "severity": 4,
+      "frequency": "medium",
+      "business_impact": "activation|retention|trust",
+      "priority_score": 10,
+      "affected_journey": "onboarding|support|general",
+      "user_quotes": [
+        "I lost my phone and created a new account, but I couldn't access it.",
+        "The CSR was very redicluso and didn't help me resolve the issue."
+      ],
+      "recommendation": "Implement a more efficient duplicate account detection system, including clear communication with users.",
+      "category": "strategic_bet"
+    },
+    {
+      "rank": 8,
+      "theme": "Cash In Issues",
+      "description": "Users are experiencing issues with cashing in, including delayed or failed transactions.",
+      "severity": 4,
+      "frequency": "high",
+      "business_impact": "transaction_volume|trust|revenue",
+      "priority_score": 12,
+      "affected_journey": "payments|transfers|savings|general",
+      "user_quotes": [
+        "I cashed in from my bank account, but the amount was not credited to my wallet.",
+        "It's been almost 2 weeks since I linked my card to Grab, and the payment is still pending."
+      ],
+      "recommendation": "Optimize cash-in processing times by improving backend infrastructure and implementing real-time updates for users.",
+      "category": "strategic_bet"
+    },
+    {
+      "rank": 9,
+      "theme": "Customer Service Issues",
+      "description": "Users are experiencing issues with customer service, including being unable to reach a human representative or receiving unhelpful responses.",
+      "severity": 4,
+      "frequency": "high",
+      "business_impact": "trust|revenue",
+      "priority_score": 12,
+      "affected_journey": "support|general",
+      "user_quotes": [
+        "I tried contacting the customer service number, but it was always busy.",
+        "The CSR didn't help me resolve my issue and just closed my ticket."
+      ],
+      "recommendation": "Implement a more efficient and effective customer service system, including 24/7 hotlines and clear communication channels.",
+      "category": "strategic_bet"
+    }
+  ],
+  "quick_wins": [
+    {
+      "issue": "Error messages are unclear and confusing.",
+      "recommendation": "Improve error messaging by making it more concise and user-friendly.",
+      "effort": "low",
+      "impact": "high",
+      "rationale": "Clearer error messaging can reduce user frustration and improve overall experience."
+    },
+    {
+      "issue": "Login screen is cluttered with unnecessary fields.",
+      "recommendation": "Simplify the login screen by removing unnecessary fields and making it more intuitive.",
+      "effort": "low",
+      "impact": "high",
+      "rationale": "A simpler login screen can improve user experience and reduce friction."
+    },
+    {
+      "issue": "Customer service hotline is often busy or unresponsive.",
+      "recommendation": "Implement a more efficient customer service system, including 24/7 hotlines and clear communication channels.",
+      "effort": "low",
+      "impact": "high",
+      "rationale": "A more efficient customer service system can improve user satisfaction and reduce support requests."
+    }
+  ],
+  "strategic_bets": [
+    {
+      "initiative": "Implement a more robust security measure, including multi-factor authentication.",
+      "description": "This initiative aims to improve the overall security of the app by implementing multi-factor authentication. This will help prevent unauthorized transactions and protect user data.",
+      "effort": "high",
+      "impact": "high",
+      "user_need": "to protect personal data and prevent fraud",
+      "competitive_context": "Competitors like GCash already offer multi-factor authentication, so Maya needs to implement this feature to stay competitive."
+    },
+    {
+      "initiative": "Optimize cash-in processing times by improving backend infrastructure.",
+      "description": "This initiative aims to improve the overall efficiency of cash-in transactions by optimizing backend infrastructure. This will help reduce processing times and improve user experience.",
+      "effort": "high",
+      "impact": "high",
+      "user_need": "to receive funds quickly and efficiently",
+      "competitive_context": "Competitors like GCash already offer fast and efficient cash-in processing, so Maya needs to implement this feature to stay competitive."
+    },
+    {
+      "initiative": "Implement a more efficient customer service system, including 24/7 hotlines.",
+      "description": "This initiative aims to improve the overall efficiency of customer service by implementing 24/7 hotlines and clear communication channels. This will help reduce support requests and improve user satisfaction.",
+      "effort": "high",
+      "impact": "high",
+      "user_need": "to receive timely and effective support",
+      "competitive_context": "Competitors like GCash already offer efficient customer service, so Maya needs to implement this feature to stay competitive."
+    }
+  ],
+  "competitive_gaps": [
+    {
+      "area": "Security Measures",
+      "competitor": "GCash",
+      "gap_description": "Maya lacks robust security measures, including multi-factor authentication.",
+      "user_quotes": [
+        "My phone was stolen and the hacker was able to access this app and took my savings and made loan in a snap of a finger."
+      ],
+      "recommendation": "Implement more robust security measures, including multi-factor authentication."
+    },
+    {
+      "area": "Data Privacy",
+      "competitor": "GCash",
+      "gap_description": "Maya lacks transparent data collection and usage practices.",
+      "user_quotes": [
+        "I'm worried about my data being compromised with Maya.",
+        "I wish there was more transparency about data collection and usage."
+      ],
+      "recommendation": "Implement more transparent data collection and usage practices, including clear communication with users."
+    },
+    {
+      "area": "Unauthorized Transactions",
+      "competitor": "GCash",
+      "gap_description": "Maya lacks robust security measures to prevent unauthorized transactions.",
+      "user_quotes": [
+        "I had money stolen from my account, and the customer support was unhelpful.",
+        "I'm worried about the security of my account after reading reviews."
+      ],
+      "recommendation": "Implement more robust security measures to prevent unauthorized transactions."
+    },
+    {
+      "area": "Data sharing with third-party vendors",
+      "competitor": "GCash",
+      "gap_description": "Maya lacks transparent data collection and usage practices, including clear communication with users.",
+      "user_quotes": [
+        "I'm worried that my personal info will be leaked if I use this app.",
+        "I don't know why they're asking for my bank account details when I just want to cash in."
+      ],
+      "recommendation": "Implement more transparent data collection and usage practices, including clear communication with users."
+    },
+    {
+      "area": "Delayed or failed transactions",
+      "competitor": "GCash",
+      "gap_description": "Maya lacks efficient transaction processing times.",
+      "user_quotes": [
+        "It's been almost 2 weeks since I linked my card to Grab, and the payment is still pending.",
+        "I cashed in from my bank account, but the amount was not credited to my wallet."
+      ],
+      "recommendation": "Optimize transaction processing times by improving backend infrastructure."
+    }
+  ],
+  "user_segment_insights": [
+    {
+      "segment": "First-time users",
+      "size_signal": "high",
+      "top_needs": [
+        "ease of use",
+        "convenience"
+      ],
+      "top_frustrations": [
+        "difficulty logging in",
+        "security concerns"
+      ],
+      "opportunity": "Improve the onboarding process to make it more user-friendly and reduce friction."
+    },
+    {
+      "segment": "Power users",
+      "size_signal": "medium",
+      "top_needs": [
+        "enhanced security measures",
+        "advanced features"
+      ],
+      "top_frustrations": [
+        "limited customization options",
+        "inconsistent customer service"
+      ],
+      "opportunity": "Implement more robust security measures and advanced features to meet the needs of power users."
+    },
+    {
+      "segment": "Credit users",
+      "size_signal": "low",
+      "top_needs": [
+        "easy-to-use features",
+        "competitive interest rates"
+      ],
+      "top_frustrations": [
+        "difficulty accessing credit services",
+        "high fees"
+      ],
+      "opportunity": "Improve the user experience for credit users by making it easier to access credit services and reducing fees."
+    }
+  ],
+  "trend_summary": {
+    "improving_areas": [
+      "login issues",
+      "cash-in delays"
+    ],
+    "declining_areas": [
+      "customer service issues",
+      "unauthorized transactions"
+    ],
+    "stable_pain_points": [
+      "security concerns",
+      "data privacy"
+    ]
+  },
+  "_version_analysis": {
+    "baseline": {
+      "avg_rating": 3.38,
+      "one_star_pct": 34.6,
+      "total_versioned_reviews": 7802
+    },
+    "version_stats": [
+      {
+        "version": "2.148.3",
+        "review_count": 188,
+        "avg_rating": 2.95,
+        "one_star_pct": 45.2,
+        "one_star_count": 85,
+        "date_first": "2025-11-16",
+        "date_last": "2026-02-09",
+        "spike": "True"
+      },
+      {
+        "version": "2.151.0",
+        "review_count": 258,
+        "avg_rating": 3.13,
+        "one_star_pct": 42.2,
+        "one_star_count": 109,
+        "date_first": "2025-12-16",
+        "date_last": "2026-01-30",
+        "spike": "False"
+      },
+      {
+        "version": "2.147.1",
+        "review_count": 679,
+        "avg_rating": 3.3,
+        "one_star_pct": 36.8,
+        "one_star_count": 250,
+        "date_first": "2025-10-29",
+        "date_last": "2026-02-05",
+        "spike": "False"
+      },
+      {
+        "version": "2.151.1",
+        "review_count": 1430,
+        "avg_rating": 3.37,
+        "one_star_pct": 35.6,
+        "one_star_count": 509,
+        "date_first": "2025-12-22",
+        "date_last": "2026-02-09",
+        "spike": "False"
+      },
+      {
+        "version": "2.145.0",
+        "review_count": 582,
+        "avg_rating": 3.34,
+        "one_star_pct": 35.1,
+        "one_star_count": 204,
+        "date_first": "2025-09-26",
+        "date_last": "2026-01-27",
+        "spike": "False"
+      },
+      {
+        "version": "2.148.1",
+        "review_count": 97,
+        "avg_rating": 3.36,
+        "one_star_pct": 35.1,
+        "one_star_count": 34,
+        "date_first": "2025-11-13",
+        "date_last": "2025-12-23",
+        "spike": "False"
+      },
+      {
+        "version": "2.149.0",
+        "review_count": 431,
+        "avg_rating": 3.36,
+        "one_star_pct": 34.8,
+        "one_star_count": 150,
+        "date_first": "2025-11-19",
+        "date_last": "2026-02-07",
+        "spike": "False"
+      },
+      {
+        "version": "2.152.0",
+        "review_count": 429,
+        "avg_rating": 3.4,
+        "one_star_pct": 33.6,
+        "one_star_count": 144,
+        "date_first": "2026-01-27",
+        "date_last": "2026-02-10",
+        "spike": "False"
+      },
+      {
+        "version": "2.146.0",
+        "review_count": 665,
+        "avg_rating": 3.4,
+        "one_star_pct": 33.2,
+        "one_star_count": 221,
+        "date_first": "2025-10-13",
+        "date_last": "2026-02-09",
+        "spike": "False"
+      },
+      {
+        "version": "2.142.1",
+        "review_count": 594,
+        "avg_rating": 3.45,
+        "one_star_pct": 33.0,
+        "one_star_count": 196,
+        "date_first": "2025-08-27",
+        "date_last": "2026-01-12",
+        "spike": "False"
+      },
+      {
+        "version": "2.150.0",
+        "review_count": 1013,
+        "avg_rating": 3.49,
+        "one_star_pct": 32.5,
+        "one_star_count": 329,
+        "date_first": "2025-11-27",
+        "date_last": "2026-02-04",
+        "spike": "False"
+      },
+      {
+        "version": "2.144.0",
+        "review_count": 962,
+        "avg_rating": 3.48,
+        "one_star_pct": 31.2,
+        "one_star_count": 300,
+        "date_first": "2025-09-04",
+        "date_last": "2026-01-30",
+        "spike": "False"
+      },
+      {
+        "version": "2.139.0",
+        "review_count": 57,
+        "avg_rating": 3.68,
+        "one_star_pct": 28.1,
+        "one_star_count": 16,
+        "date_first": "2025-08-30",
+        "date_last": "2026-01-30",
+        "spike": "False"
+      },
+      {
+        "version": "2.137.4",
+        "review_count": 42,
+        "avg_rating": 3.93,
+        "one_star_pct": 26.2,
+        "one_star_count": 11,
+        "date_first": "2025-08-30",
+        "date_last": "2026-02-08",
+        "spike": "False"
+      },
+      {
+        "version": "2.141.1",
+        "review_count": 86,
+        "avg_rating": 4.24,
+        "one_star_pct": 16.3,
+        "one_star_count": 14,
+        "date_first": "2025-08-27",
+        "date_last": "2026-01-21",
+        "spike": "False"
+      }
+    ],
+    "flagged_versions": [
+      "2.148.3"
+    ],
+    "spike_analyses": {
+      "2.148.3": {
+        "version": "2.148.3",
+        "primary_issues": [
+          {
+            "theme": "Login and Authentication Issues",
+            "description": "Users experienced frequent login errors, failed biometric authentication, and difficulties with OTP verification.",
+            "severity": 4,
+            "affected_area": "login|security",
+            "likely_cause": "bug|regression",
+            "quotes": [
+              "Always encounteted log in issues even using my fingerprint or screenlock.",
+              "I\u2019m stuck on the upgrade application status step, and every time I click \u201cTake\u201d on the last question, the app crashes and locks me out completely."
+            ]
+          },
+          {
+            "theme": "Payment and Transfer Issues",
+            "description": "Users reported difficulties with cashing out, failed transactions, and delayed refunds.",
+            "severity": 4,
+            "affected_area": "payments|transfers",
+            "likely_cause": "bug|regression",
+            "quotes": [
+              "it always says error on my phone. cannot log in using my phone...",
+              "my payment on Nov. 10 2025 amounting 2000php thru bdo not reflected on my accnt and I can't recive any acknowledgement for that.."
+            ]
+          },
+          {
+            "theme": "Customer Support Issues",
+            "description": "Users experienced poor customer support, long wait times, and unhelpful chatbots.",
+            "severity": 4,
+            "affected_area": "customer_support",
+            "likely_cause": "design_change|other",
+            "quotes": [
+              "puro follow up na lang sobrang tagal ! NAPAKABAGAL PA MAG PROCESS NG CONCERN MISSING BALANCE KO DI PA DIN NAIBABALIK MAG 2 WEEKS NA DINAIG PA BANKO !",
+              "Customer service is bad. And it is not secured."
+            ]
+          }
+        ],
+        "comparison_to_previous": "This version has a significantly higher rate of 1-star reviews (45%) compared to the overall baseline (35%).",
+        "likely_root_cause_summary": "A combination of bugs, regressions, and design changes likely caused widespread issues with login, payments, and customer support in this release."
+      }
+    }
+  }
+}

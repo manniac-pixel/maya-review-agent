@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "name": "Maya Design System",
+    "version": "3.0.0",
+    "description": "Design tokens for Maya fintech app redesign. Clean, minimal, solid design matching maya.ph brand language.",
+    "lastUpdated": "2026-02-15"
+  },
+
+  "color": {
+    "brand": {
+      "mint": { "value": "#2FF29E", "description": "Maya Mint Green — primary CTAs, toggle ON state, key accents. The signature Maya color." },
+      "navy": { "value": "#112432", "description": "Dark Navy — text, dark buttons, icons, app icon background." },
+      "white": { "value": "#FFFFFF", "description": "White — screen backgrounds, card backgrounds, inverse text." },
+      "jade": { "value": "#00B463", "description": "Jade Green — success states, completed steps, text links." },
+      "sand": { "value": "#D69474", "description": "Burning Sand — warning, pending, investigating states." }
+    },
+    "semantic": {
+      "success": { "value": "#00B463", "description": "Completed transactions, verified states" },
+      "warning": { "value": "#D69474", "description": "Pending, investigating, awaiting states" },
+      "error": { "value": "#FF3B30", "description": "Kill switch, logout, destructive actions" },
+      "info": { "value": "#007AFF", "description": "Informational states (iOS system blue)" }
+    },
+    "text": {
+      "primary": { "value": "#000000", "description": "Headlines, primary body text — pure black for maximum contrast" },
+      "secondary": { "value": "#6B7280", "description": "Subtitles, descriptions, secondary labels" },
+      "tertiary": { "value": "#9CA3AF", "description": "Placeholders, captions, muted labels, uppercase section headers" },
+      "inverse": { "value": "#FFFFFF", "description": "Text on dark/colored backgrounds" },
+      "link": { "value": "#2FF29E", "description": "Interactive text links — Maya Mint Green" },
+      "linkSecondary": { "value": "#00B463", "description": "Secondary links — Jade Green" }
+    },
+    "background": {
+      "primary": { "value": "#FFFFFF", "description": "Main screen background — solid white" },
+      "secondary": { "value": "#F9FAFB", "description": "Input field background, chat area background" },
+      "card": { "value": "#FFFFFF", "description": "Card backgrounds — solid white" },
+      "greenHighlight": { "value": "rgba(47, 242, 158, 0.05)", "description": "Subtle green tint for highlighted/active items (e.g., current device)" },
+      "overlay": { "value": "rgba(0, 0, 0, 0.40)", "description": "Modal dimming overlay" }
+    },
+    "border": {
+      "default": { "value": "#E5E7EB", "description": "Standard borders — input fields, card outlines, outlined buttons" },
+      "light": { "value": "#F3F4F6", "description": "Subtle dividers — list separators, section dividers, nav bar borders" }
+    }
+  },
+
+  "typography": {
+    "fontFamily": {
+      "primary": { "value": "'Cerebri Sans Pro', 'Plus Jakarta Sans', -apple-system, system-ui, sans-serif", "description": "Used for everything — headlines (bold), body (regular). Clean geometric sans-serif." },
+      "logo": { "value": "'Tuka'", "description": "Logo wordmark only — the 'maya' text in the app icon. Not used in UI text." }
+    },
+    "fontSize": {
+      "h1": { "value": "48px", "lineHeight": "1.1", "description": "Hero numbers — Safety Score percentage, large amounts" },
+      "h2": { "value": "36px", "lineHeight": "1.2", "description": "Large amounts — transaction totals" },
+      "h3": { "value": "28px", "lineHeight": "1.25", "description": "Screen titles — 'Welcome back', 'Login', section headings" },
+      "navTitle": { "value": "18px", "lineHeight": "1.3", "description": "Navigation bar titles — centered nav text" },
+      "cardTitle": { "value": "18px", "lineHeight": "1.4", "description": "Card titles — 'Ticket #1234', 'Kill Switch'" },
+      "body": { "value": "16px", "lineHeight": "1.5", "description": "Standard body text, input text, list items" },
+      "small": { "value": "14px", "lineHeight": "1.5", "description": "Descriptions, links, secondary info, chat text" },
+      "label": { "value": "12px", "lineHeight": "1.4", "description": "Uppercase labels, timestamps, status pills, badges" },
+      "micro": { "value": "10px", "lineHeight": "1.3", "description": "Chat timestamps" }
+    },
+    "fontWeight": {
+      "regular": { "value": 400, "description": "Body text, descriptions, placeholders" },
+      "medium": { "value": 500, "description": "Semi-emphasized text" },
+      "semibold": { "value": 600, "description": "Button labels, status pills" },
+      "bold": { "value": 700, "description": "Headlines, card titles, nav titles" }
+    },
+    "letterSpacing": {
+      "tight": { "value": "-0.5px", "description": "Large display text for compact elegance" },
+      "normal": { "value": "0px", "description": "Standard body text" },
+      "wide": { "value": "0.5px", "description": "Uppercase labels — 'MOBILE NUMBER', 'MY TICKETS'" }
+    }
+  },
+
+  "spacing": {
+    "xxs": { "value": "4px" },
+    "xs": { "value": "8px" },
+    "sm": { "value": "12px" },
+    "md": { "value": "16px" },
+    "lg": { "value": "24px" },
+    "xl": { "value": "32px" },
+    "xxl": { "value": "48px" },
+    "xxxl": { "value": "64px" },
+    "screenMargin": { "value": "24px", "description": "Horizontal screen edge padding" },
+    "cardPadding": { "value": "20px", "description": "Internal card padding" },
+    "inputPadding": { "value": "16px", "description": "Input field internal padding" },
+    "sectionGap": { "value": "24px", "description": "Vertical gap between major sections" },
+    "fieldGap": { "value": "16px", "description": "Vertical gap between form fields" },
+    "bottomCTA": { "value": "24px", "description": "Bottom CTA distance from screen edge" }
+  },
+
+  "borderRadius": {
+    "none": { "value": "0px" },
+    "sm": { "value": "8px", "description": "Small elements" },
+    "input": { "value": "12px", "description": "Input fields" },
+    "card": { "value": "16px", "description": "Cards, grouped lists, modals" },
+    "modal": { "value": "20px", "description": "Modal dialogs" },
+    "appIcon": { "value": "28px", "description": "Maya app icon corner radius" },
+    "pill": { "value": "50px", "description": "Buttons, toggles, status pills — Maya's signature pill shape" },
+    "circle": { "value": "50%", "description": "Circular elements — checkmarks, status dots, avatars" }
+  },
+
+  "shadow": {
+    "none": { "value": "none", "description": "Most elements — Maya uses flat, borderless design" },
+    "subtle": { "value": "0 1px 3px rgba(0, 0, 0, 0.08)", "description": "Very subtle lift — nav bars, floating elements" },
+    "card": { "value": "0 2px 8px rgba(0, 0, 0, 0.06)", "description": "Cards that need slight elevation" },
+    "button": { "value": "0 4px 12px rgba(47, 242, 158, 0.30)", "description": "Maya Mint Green CTA buttons — green-tinted soft shadow" },
+    "modal": { "value": "0 8px 24px rgba(0, 0, 0, 0.15)", "description": "Modal dialogs above overlay" }
+  },
+
+  "animation": {
+    "duration": {
+      "fast": { "value": "150ms", "description": "Button press, toggle snap" },
+      "normal": { "value": "300ms", "description": "Screen transitions, state changes" },
+      "slow": { "value": "500ms", "description": "Modal appear/dismiss" }
+    },
+    "easing": {
+      "default": { "value": "ease-out" },
+      "spring": { "value": "cubic-bezier(0.4, 0, 0.2, 1)", "description": "iOS-like spring for modals and toggles" }
+    },
+    "interaction": {
+      "buttonPress": { "scale": "0.97", "duration": "150ms", "description": "Slight press-down effect" },
+      "toggleSlide": { "translateX": "20px", "duration": "300ms", "description": "Toggle knob slide animation" }
+    }
+  },
+
+  "layout": {
+    "screen": {
+      "width": { "value": "393px", "description": "iPhone 15 Pro width" },
+      "height": { "value": "852px", "description": "iPhone 15 Pro height" }
+    },
+    "touchTarget": {
+      "minimum": { "value": "44px", "description": "Apple HIG minimum touch target" }
+    },
+    "buttonHeight": {
+      "primary": { "value": "56px", "description": "Primary CTA button height" },
+      "secondary": { "value": "48px", "description": "Secondary/outlined button height" }
+    },
+    "navBar": {
+      "height": { "value": "44px", "description": "Standard iOS navigation bar" }
+    },
+    "toggle": {
+      "width": { "value": "51px", "description": "iOS standard toggle width" },
+      "height": { "value": "31px", "description": "iOS standard toggle height" }
+    }
+  }
+}

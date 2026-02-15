@@ -1,0 +1,45 @@
+.env
+__pycache__/
+*.pyc
+.DS_Store
+
+# Raw data (large CSVs — not committed)
+data/*.csv
+
+# Intermediate JSON (regenerable from pipeline)
+data/temporal_analysis*.json
+data/comprehensive_analysis*.json
+data/funnel_analysis*.json
+data/accessibility_analysis*.json
+data/competitor_comparison*.json
+data/journey_map*.json
+data/screenshots_manifest.json
+
+# Keep these for GitHub Pages / static site:
+# data/final_insights*.json  (committed)
+# data/maya_insights_report*.md  (committed)
+# data/maya_notion_template.md  (committed)
+# data/maya_analysis_brief.md  (committed)
+# data/journey_map_report.md  (committed)
+# data/charts/  (committed)
+
+# Screenshots (large, regenerable)
+data/screenshots/
+
+# Build artifacts
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+.coverage
+.pytest_cache/
+scraper_output*.txt
+data/maya_agent.log
+*.log
+.claude/
+scrape_competitor_temp.py
+*.pdf
+*.xlsx
+minimal-research/.DS_Store
+minimal-research/data/reviews.csv

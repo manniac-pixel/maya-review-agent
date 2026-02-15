@@ -1,0 +1,121 @@
+{
+  "pain_points": [
+    {
+      "rank": 1,
+      "title": "Login Issues",
+      "severity": "critical",
+      "frequency": "~40%",
+      "user_journey_stage": "daily_use",
+      "description": "Users experience frequent login issues, including being unable to log in, receiving OTPs late or not at all, and facing errors when trying to reset passwords.",
+      "representative_quotes": [
+        "I've been trying to log in last week still unable to log in getting error that didn't load right.",
+        "i cant reset my password. the app doesn't send the OTP",
+        "IT'S NO LONGER OPENIINGG"
+      ],
+      "design_implication": "Implement robust login mechanisms, improve OTP delivery, and enhance password recovery processes."
+    },
+    {
+      "rank": 2,
+      "title": "Customer Support",
+      "severity": "high",
+      "frequency": "~25%",
+      "user_journey_stage": "support",
+      "description": "Users express frustration with the customer support system, citing difficulties in reaching live agents, long wait times, and unhelpful chatbots.",
+      "representative_quotes": [
+        "Their customer service is terrible! After waiting for a very long time, they still can\u2019t even fix my concern.",
+        "poor customer service. Very unresponsive. It will take 9 days before they acknowledge your ticket",
+        "Chat support be like: 'Im fully equipped with everything you need ! all you need to do is to dial this number blah blah."
+      ],
+      "design_implication": "Revamp the customer support system, including implementing more efficient chatbots and live agent handling processes."
+    },
+    {
+      "rank": 3,
+      "title": "Transaction Errors",
+      "severity": "high",
+      "frequency": "~20%",
+      "user_journey_stage": "transactions",
+      "description": "Users experience issues with transactions, including failed transfers, delayed or missing OTPs, and errors when trying to send or receive money.",
+      "representative_quotes": [
+        "I've been trying to transfer money from this app to Gcash. It needs to upgrade first before you can transfer.",
+        "walang kwentang service nag urgent ka na hindi ka maka login sa account kung kaylan need mo na yung budget para sa emergency expenses",
+        "USELESS. NAGKATRANSACTIO ERROR TAPOS YUNG REFUND AYAW NILA IBIGAY"
+      ],
+      "design_implication": "Improve transactional workflows, enhance OTP delivery mechanisms, and address errors in real-time."
+    },
+    {
+      "rank": 4,
+      "title": "Account Management",
+      "severity": "medium",
+      "frequency": "~15%",
+      "user_journey_stage": "account_management",
+      "description": "Users experience difficulties with account management tasks, including verifying accounts, updating information, and deleting accounts.",
+      "representative_quotes": [
+        "I've been trying to verify my account for a long time and yet it's still not verified as of the moment.",
+        "The app was always offline. please assist me on this matter. I really need to log right now because I need my money to pay my bills which are due today",
+        "HOW TO CANCEL UPGRADE ACCOUNT APPLICATION!? I can't open the maya app after I submit the verification"
+      ],
+      "design_implication": "Streamline account management processes, improve online support resources, and enhance user experience during these tasks."
+    },
+    {
+      "rank": 5,
+      "title": "Onboarding",
+      "severity": "medium",
+      "frequency": "~10%",
+      "user_journey_stage": "onboarding",
+      "description": "Users encounter difficulties during the onboarding process, including issues with account creation, verification, and initial setup.",
+      "representative_quotes": [
+        "my first time installing this app, put my basic information to create an account but keeps saying 'something went wrong'.",
+        "I CANT PUT MY ADDRESS, MY PLACE OF BIRTH IS IN THE PHILIPPINES AND IT'S NOT ON THE CHOICES.",
+        "i was trying to log in for almost a week now but there's always the log in error,"
+      ],
+      "design_implication": "Simplify and streamline the onboarding process, reduce errors during account creation and verification."
+    }
+  ],
+  "competitive_gaps": [
+    {
+      "rank": 1,
+      "area": "reliability",
+      "gcash_strength": "stable and reliable service",
+      "maya_weakness": "frequent login issues, account freezes, and unauthorized transactions",
+      "design_opportunity": "Implement a more robust error handling system to prevent frequent crashes and provide clear instructions for troubleshooting"
+    },
+    {
+      "rank": 2,
+      "area": "customer support",
+      "gcash_strength": "responsive customer service team",
+      "maya_weakness": "poor customer support, unhelpful AI-powered chatbots, and long wait times for human assistance",
+      "design_opportunity": "Invest in human customer support agents who can provide personalized help and resolve issues efficiently"
+    },
+    {
+      "rank": 3,
+      "area": "user experience",
+      "gcash_strength": "intuitive interface and easy account management",
+      "maya_weakness": "complex and frustrating upgrade process, slow loading times, and frequent app crashes",
+      "design_opportunity": "Simplify the onboarding process and improve app performance by optimizing code and reducing unnecessary features"
+    }
+  ],
+  "feature_requests": [
+    {
+      "rank": 1,
+      "feature": "Improved Login System",
+      "demand_signal": "High (34 mentions)",
+      "user_need": "Easy and reliable access to account",
+      "design_direction": "Simplify login process, reduce errors, and provide clear instructions for troubleshooting"
+    },
+    {
+      "rank": 2,
+      "feature": "Enhanced Customer Support",
+      "demand_signal": "High (28 mentions)",
+      "user_need": "Timely and effective assistance with issues",
+      "design_direction": "Implement human customer support agents, improve chatbot functionality, and provide clear escalation procedures"
+    },
+    {
+      "rank": 3,
+      "feature": "Fix Account Upgrade Issues",
+      "demand_signal": "Medium-High (20 mentions)",
+      "user_need": "Ability to upgrade account without errors or delays",
+      "design_direction": "Streamline account upgrade process, reduce AI reliance, and provide clear instructions for resolving common issues"
+    }
+  ],
+  "executive_summary": "Here is a 3-4 sentence executive summary for a design team:\n\nOur analysis of Maya's pain points highlights opportunities to improve user experience through enhanced login security, intuitive customer support, and streamlined account management. Designing solutions that address these issues can help Maya close the competitive gap with GCash in reliability and user experience. Key feature requests from customers indicate a need for more robust login systems, improved customer support channels, and simplified account upgrade processes. By addressing these pain points through design-led solutions, we can improve customer satisfaction and drive business growth."
+}
