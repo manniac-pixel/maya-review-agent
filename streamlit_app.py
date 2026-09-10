@@ -8,9 +8,12 @@ Run: streamlit run streamlit_app.py
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Optional
 
+import pandas as pd
+import plotly.graph_objects as go
 import streamlit as st
 
 # -- Config -------------------------------------------------------------------
@@ -291,10 +294,6 @@ def load_report(suffix: str = "") -> Optional[str]:
     return load_markdown(str(DATA_DIR / f"maya_insights_report{suffix}.md"))
 
 
-def chart_path(name: str) -> Path:
-    return CHARTS_DIR / name
-
-
 def get_nested(d, *keys, default=None):
     for k in keys:
         if isinstance(d, dict):
@@ -320,6 +319,342 @@ def freq_label(freq: str) -> str:
     colors = {"high": "pill-red", "medium": "pill-amber", "low": "pill-green"}
     cls = colors.get(f, "pill-navy")
     return f'<span class="pill {cls}">{f.upper()}</span>'
+
+
+# -- Live charts ----------------------------------------------------------------
+# Validated CVD-safe categorical order (dataviz skill default), used only by the
+# multi-series lifecycle chart. Single-series charts use the Maya brand hue.
+THEME_LINE_COLORS = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4"]
+GRID_COLOR = "#E5E7EB"
+
+
+def axis_title(text: str) -> dict:
+    return dict(text=text, font=dict(color=MAYA_DARK, size=12))
+
+
+def hbar_xaxis(values: list, title: str) -> dict:
+    headroom = max(values) * 1.18 if values and max(values) > 0 else 1
+    return dict(showgrid=True, gridcolor=GRID_COLOR, zeroline=False, title=axis_title(title), range=[0, headroom])
+
+
+def base_layout(**overrides) -> dict:
+    tickfont = dict(color=MAYA_DARK, size=12)
+    layout = dict(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(color=MAYA_DARK, size=13),
+        margin=dict(l=10, r=10, t=10, b=10),
+        hoverlabel=dict(bgcolor=MAYA_DARK, font_color="white", bordercolor=MAYA_DARK),
+        xaxis=dict(showgrid=False, zeroline=False, linecolor=GRID_COLOR, tickfont=tickfont),
+        yaxis=dict(showgrid=True, gridcolor=GRID_COLOR, zeroline=False, tickfont=tickfont),
+        legend=dict(font=dict(color=MAYA_DARK)),
+    )
+    # Merge one level deep so a chart's xaxis/yaxis/legend override doesn't
+    # blow away the base tickfont color default (axis titles set their own
+    # font explicitly via axis_title()).
+    for key, value in overrides.items():
+        if isinstance(value, dict) and isinstance(layout.get(key), dict):
+            layout[key] = {**layout[key], **value}
+        else:
+            layout[key] = value
+    return layout
+
+
+@st.cache_data
+def load_reviews_df() -> Optional[pd.DataFrame]:
+    path = DATA_DIR / "raw_reviews.csv"
+    if not path.exists():
+        return None
+    df = pd.read_csv(path, parse_dates=["date"])
+    df["rating"] = pd.to_numeric(df["rating"], errors="coerce")
+    return df.dropna(subset=["date", "rating"])
+
+
+def build_rating_trend_chart() -> Optional[go.Figure]:
+    df = load_reviews_df()
+    if df is None or df.empty:
+        return None
+    monthly = (
+        df.set_index("date").resample("MS")["rating"]
+        .agg(["mean", "count"]).reset_index()
+    )
+    fig = go.Figure(go.Scatter(
+        x=monthly["date"], y=monthly["mean"],
+        mode="lines+markers",
+        line=dict(color=MAYA_JADE, width=2, shape="spline", smoothing=0.3),
+        marker=dict(size=8, color=MAYA_JADE),
+        customdata=monthly["count"],
+        hovertemplate="%{x|%b %Y}<br>Avg rating: %{y:.2f}<br>Reviews: %{customdata}<extra></extra>",
+    ))
+    fig.update_layout(**base_layout(
+        yaxis=dict(showgrid=True, gridcolor=GRID_COLOR, zeroline=False, range=[1, 5], title=axis_title("Avg rating")),
+        height=320,
+    ))
+    return fig
+
+
+def dedupe_labels(labels: list) -> list:
+    seen: dict[str, int] = {}
+    out = []
+    for label in labels:
+        seen[label] = seen.get(label, 0) + 1
+        out.append(label if seen[label] == 1 else f"{label} ({seen[label]})")
+    return out
+
+
+def build_priority_scores_chart(opportunities: list) -> Optional[go.Figure]:
+    if not opportunities:
+        return None
+    ranked = sorted(opportunities, key=lambda o: o.get("priority_score", 0))
+    themes = dedupe_labels([o.get("theme", o.get("issue", "Unknown")) for o in ranked])
+    scores = [o.get("priority_score", 0) for o in ranked]
+    fig = go.Figure(go.Bar(
+        x=scores, y=themes, orientation="h", cliponaxis=False,
+        marker=dict(color=MAYA_JADE),
+        text=[str(s) for s in scores], textposition="outside",
+        hovertemplate="%{y}<br>Priority score: %{x}<extra></extra>",
+    ))
+    fig.update_layout(**base_layout(
+        xaxis=hbar_xaxis(scores, "Priority score"),
+        yaxis=dict(showgrid=False, zeroline=False),
+        height=max(220, 42 * len(themes)),
+        bargap=0.35,
+        margin=dict(l=10, r=44, t=10, b=10),
+    ))
+    return fig
+
+
+def build_funnel_chart(hotspots: list) -> Optional[go.Figure]:
+    if not hotspots:
+        return None
+    ordered = sorted(hotspots, key=lambda h: h.get("evidence_count", h.get("evidence", 0)))
+    labels = dedupe_labels([h.get("screen_or_step", h.get("screen", "Unknown")) for h in ordered])
+    counts = [h.get("evidence_count", h.get("evidence", 0)) for h in ordered]
+    sevs = [h.get("severity", 0) for h in ordered]
+    colors = [severity_color(s) for s in sevs]
+    fig = go.Figure(go.Bar(
+        x=counts, y=labels, orientation="h", cliponaxis=False,
+        marker=dict(color=colors),
+        text=[f"{c} reviews · Sev {s}/5" for c, s in zip(counts, sevs)], textposition="outside",
+        hovertemplate="%{y}<br>%{text}<extra></extra>",
+    ))
+    fig.update_layout(**base_layout(
+        xaxis=hbar_xaxis(counts, "Reviews evidencing drop-off"),
+        yaxis=dict(showgrid=False, zeroline=False),
+        height=max(220, 48 * len(labels)),
+        bargap=0.35,
+        margin=dict(l=10, r=90, t=10, b=10),
+    ))
+    return fig
+
+
+def build_version_ratings_chart(version_stats: list, baseline: dict) -> Optional[go.Figure]:
+    if not version_stats:
+        return None
+    ordered = sorted(version_stats, key=lambda v: v.get("date_first", ""))
+    versions = dedupe_labels([f"v{v.get('version', '?')}" for v in ordered])
+    ratings = [v.get("avg_rating", 0) for v in ordered]
+    is_spike = [str(v.get("spike")) == "True" for v in ordered]
+    colors = ["#DC2626" if s else MAYA_JADE for s in is_spike]
+    fig = go.Figure(go.Bar(
+        x=versions, y=ratings, cliponaxis=False,
+        marker=dict(color=colors),
+        text=[f"{r:.2f}" for r in ratings], textposition="outside",
+        hovertemplate="%{x}<br>Avg rating: %{y:.2f}<extra></extra>",
+        showlegend=False,
+    ))
+    for name, color in [("Regression release", "#DC2626"), ("Normal", MAYA_JADE)]:
+        fig.add_trace(go.Bar(x=[None], y=[None], marker=dict(color=color), name=name, showlegend=True))
+    baseline_rating = baseline.get("avg_rating")
+    if baseline_rating:
+        fig.add_hline(y=baseline_rating, line=dict(color=MAYA_GRAY, width=1, dash="dash"))
+    fig.update_layout(**base_layout(
+        yaxis=dict(showgrid=True, gridcolor=GRID_COLOR, zeroline=False, title=axis_title("Avg rating"), range=[0, 5.4]),
+        xaxis=dict(showgrid=False, zeroline=False, title=axis_title("Version (chronological)")),
+        height=340,
+        bargap=0.3,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0),
+    ))
+    return fig
+
+
+def normalize_theme(theme: str) -> str:
+    s = re.sub(r"\s+", " ", theme.strip())
+    s = re.sub(r"/\s+", "/", s)
+    s = re.sub(r"^Loans?/?\s*Credit", "Loan/Credit", s, flags=re.I)
+    s = re.sub(r"\s*(Issues|Concerns)$", "", s, flags=re.I)
+    alias = {
+        "Onboarding": "KYC/Onboarding",
+        "KYC": "KYC/Onboarding",
+        "KYC/Onboarding": "KYC/Onboarding",
+    }
+    return alias.get(s, s)
+
+
+def aggregate_theme_weights(temporal: dict) -> tuple[list, dict]:
+    months = temporal.get("months_analyzed", [])
+    freq_weight = {"high": 3, "medium": 2, "low": 1}
+    series: dict[str, dict[str, int]] = {}
+    for month in months:
+        for p in temporal.get("monthly_results", {}).get(month, {}).get("pain_points", []):
+            theme = normalize_theme(p.get("theme", "Unknown"))
+            weight = freq_weight.get(str(p.get("frequency", "")).lower(), 1)
+            series.setdefault(theme, {})[month] = max(weight, series.get(theme, {}).get(month, 0))
+    return months, series
+
+
+def build_lifecycle_chart(temporal: dict) -> Optional[go.Figure]:
+    if not temporal:
+        return None
+    months, series = aggregate_theme_weights(temporal)
+    top_themes = sorted(series.items(), key=lambda kv: -sum(kv[1].values()))[:5]
+    if not top_themes:
+        return None
+
+    fig = go.Figure()
+    for i, (theme, month_vals) in enumerate(top_themes):
+        y = [month_vals.get(m) for m in months]
+        fig.add_trace(go.Scatter(
+            x=months, y=y, mode="lines+markers", name=theme, connectgaps=False,
+            line=dict(color=THEME_LINE_COLORS[i % len(THEME_LINE_COLORS)], width=2),
+            marker=dict(size=8),
+            hovertemplate=f"{theme}<br>" + "%{x}: %{customdata}<extra></extra>",
+            customdata=[{3: "High", 2: "Medium", 1: "Low"}.get(v, "—") for v in y],
+        ))
+    fig.update_layout(**base_layout(
+        yaxis=dict(
+            showgrid=True, gridcolor=GRID_COLOR, zeroline=False,
+            tickmode="array", tickvals=[1, 2, 3], ticktext=["Low", "Medium", "High"],
+            range=[0.5, 3.5], title=axis_title("Reported severity"),
+        ),
+        xaxis=dict(showgrid=False, zeroline=False),
+        height=360,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0),
+    ))
+    return fig
+
+
+def build_sentiment_distribution_chart() -> Optional[go.Figure]:
+    df = load_reviews_df()
+    if df is None or df.empty:
+        return None
+    def bucket(r):
+        if r >= 4:
+            return "Positive"
+        if r == 3:
+            return "Neutral"
+        return "Negative"
+    counts = df["rating"].apply(bucket).value_counts()
+    order = ["Positive", "Neutral", "Negative"]
+    colors = {"Positive": MAYA_JADE, "Neutral": MAYA_GRAY, "Negative": "#DC2626"}
+    labels = [o for o in order if o in counts.index]
+    values = [int(counts[o]) for o in labels]
+    fig = go.Figure(go.Bar(
+        x=values, y=labels, orientation="h", cliponaxis=False,
+        marker=dict(color=[colors[l] for l in labels]),
+        text=[f"{v:,} ({v/sum(values):.0%})" for v in values], textposition="outside",
+        hovertemplate="%{y}<br>%{text}<extra></extra>",
+    ))
+    fig.update_layout(**base_layout(
+        xaxis=hbar_xaxis(values, "Reviews"),
+        yaxis=dict(showgrid=False, zeroline=False),
+        height=240,
+        bargap=0.4,
+        margin=dict(l=10, r=90, t=10, b=10),
+    ))
+    return fig
+
+
+def build_severity_frequency_chart(opportunities: list) -> Optional[go.Figure]:
+    if not opportunities:
+        return None
+    freq_x = {"low": 1, "medium": 2, "high": 3}
+    cells: dict[tuple, list] = {}
+    for o in opportunities:
+        key = (freq_x.get(str(o.get("frequency", "")).lower(), 2), o.get("severity", 0))
+        cells.setdefault(key, []).append(o.get("theme", "Unknown"))
+
+    x = [k[0] for k in cells]
+    y = [k[1] for k in cells]
+    counts = [len(v) for v in cells.values()]
+    hover_lists = ["<br>".join(v) for v in cells.values()]
+    fig = go.Figure(go.Scatter(
+        x=x, y=y, mode="markers",
+        marker=dict(
+            size=counts, sizemode="area", sizeref=2. * max(counts) / (46. ** 2), sizemin=14,
+            color=MAYA_JADE, line=dict(width=2, color="white"),
+        ),
+        customdata=list(zip(counts, hover_lists)),
+        hovertemplate="%{customdata[0]} issue(s):<br>%{customdata[1]}<extra></extra>",
+    ))
+    fig.update_layout(**base_layout(
+        xaxis=dict(
+            showgrid=False, zeroline=False, tickmode="array", tickvals=[1, 2, 3],
+            ticktext=["Low", "Medium", "High"], title=axis_title("Frequency"), range=[0.5, 3.5],
+        ),
+        yaxis=dict(
+            showgrid=True, gridcolor=GRID_COLOR, zeroline=False, title=axis_title("Severity"),
+            range=[0.5, 5.5], dtick=1,
+        ),
+        height=380,
+    ))
+    return fig
+
+
+def build_pain_point_frequency_chart(temporal: dict) -> Optional[go.Figure]:
+    if not temporal:
+        return None
+    _, series = aggregate_theme_weights(temporal)
+    if not series:
+        return None
+    ranked = sorted(series.items(), key=lambda kv: sum(kv[1].values()))[-9:]
+    labels = [t for t, _ in ranked]
+    totals = [sum(v.values()) for _, v in ranked]
+    fig = go.Figure(go.Bar(
+        x=totals, y=labels, orientation="h", cliponaxis=False,
+        marker=dict(color=MAYA_JADE),
+        text=[str(t) for t in totals], textposition="outside",
+        hovertemplate="%{y}<br>Weighted mentions: %{x}<extra></extra>",
+    ))
+    fig.update_layout(**base_layout(
+        xaxis=hbar_xaxis(totals, "Weighted mentions (months × severity)"),
+        yaxis=dict(showgrid=False, zeroline=False),
+        height=max(220, 34 * len(labels)),
+        bargap=0.3,
+        margin=dict(l=10, r=30, t=10, b=10),
+    ))
+    return fig
+
+
+def build_business_impact_chart(opportunities: list) -> Optional[go.Figure]:
+    if not opportunities:
+        return None
+    counts: dict[str, int] = {}
+    for o in opportunities:
+        impact = o.get("business_impact", "")
+        for tag in (impact.split("|") if isinstance(impact, str) else (impact or [])):
+            tag = tag.strip().replace("_", " ").title()
+            if tag:
+                counts[tag] = counts.get(tag, 0) + 1
+    if not counts:
+        return None
+    ranked = sorted(counts.items(), key=lambda kv: kv[1])
+    labels = [k for k, _ in ranked]
+    values = [v for _, v in ranked]
+    fig = go.Figure(go.Bar(
+        x=values, y=labels, orientation="h", cliponaxis=False,
+        marker=dict(color=MAYA_SAND),
+        text=[str(v) for v in values], textposition="outside",
+        hovertemplate="%{y}<br>Issues tagged: %{x}<extra></extra>",
+    ))
+    fig.update_layout(**base_layout(
+        xaxis=hbar_xaxis(values, "Ranked issues affected"),
+        yaxis=dict(showgrid=False, zeroline=False),
+        height=max(220, 38 * len(labels)),
+        bargap=0.35,
+        margin=dict(l=10, r=30, t=10, b=10),
+    ))
+    return fig
 
 
 # -- Sidebar ------------------------------------------------------------------
@@ -494,10 +829,10 @@ if page == "Overview":
     st.divider()
 
     # Rating trend chart
-    rating_chart = chart_path("rating_trend.png")
-    if rating_chart.exists():
+    rating_fig = build_rating_trend_chart()
+    if rating_fig:
         st.markdown("#### Rating Trend Over Time")
-        st.image(str(rating_chart), use_container_width=True)
+        st.plotly_chart(rating_fig, use_container_width=True, config={"displayModeBar": False})
 
     # Trend summary
     if trend_summary:
@@ -564,9 +899,9 @@ elif page == "Ranked Issues":
         st.dataframe(df, use_container_width=True, hide_index=True)
 
         # Priority scores chart
-        priority_chart = chart_path("priority_scores.png")
-        if priority_chart.exists():
-            st.image(str(priority_chart), use_container_width=True)
+        priority_fig = build_priority_scores_chart(opportunities)
+        if priority_fig:
+            st.plotly_chart(priority_fig, use_container_width=True, config={"displayModeBar": False})
 
         st.divider()
 
@@ -648,9 +983,9 @@ elif page == "Funnel Drop-offs":
         funnel = load_json(str(DATA_DIR / "funnel_analysis.json"))
 
     # Show the chart
-    funnel_chart = chart_path("funnel_dropoff.png")
-    if funnel_chart.exists():
-        st.image(str(funnel_chart), use_container_width=True)
+    funnel_fig = build_funnel_chart((funnel or {}).get("drop_off_hotspots", []))
+    if funnel_fig:
+        st.plotly_chart(funnel_fig, use_container_width=True, config={"displayModeBar": False})
 
     st.divider()
 
@@ -721,9 +1056,11 @@ elif page == "Version Analysis":
     version_data = insights.get("_version_analysis", {})
 
     # Version chart
-    version_chart = chart_path("version_ratings.png")
-    if version_chart.exists():
-        st.image(str(version_chart), use_container_width=True)
+    version_fig = build_version_ratings_chart(
+        version_data.get("version_stats", []), version_data.get("baseline", {})
+    )
+    if version_fig:
+        st.plotly_chart(version_fig, use_container_width=True, config={"displayModeBar": False})
 
     st.divider()
 
@@ -805,11 +1142,14 @@ elif page == "Version Analysis":
             st.dataframe(vdf, use_container_width=True, hide_index=True)
 
     # Lifecycle chart
-    lifecycle_chart = chart_path("issue_lifecycle.png")
-    if lifecycle_chart.exists():
+    temporal = load_json(str(DATA_DIR / f"temporal_analysis{suffix}.json"))
+    if not temporal:
+        temporal = load_json(str(DATA_DIR / "temporal_analysis.json"))
+    lifecycle_fig = build_lifecycle_chart(temporal)
+    if lifecycle_fig:
         st.divider()
         st.markdown("#### Issue Lifecycle Over Time")
-        st.image(str(lifecycle_chart), use_container_width=True)
+        st.plotly_chart(lifecycle_fig, use_container_width=True, config={"displayModeBar": False})
 
 
 elif page == "Competitor Analysis":
@@ -907,29 +1247,34 @@ elif page == "Charts":
     </p>
     """, unsafe_allow_html=True)
 
-    chart_files = [
-        ("rating_trend.png", "Rating Trend Over Time"),
-        ("sentiment_distribution.png", "Sentiment Distribution"),
-        ("priority_scores.png", "Priority Scores"),
-        ("severity_frequency.png", "Severity vs Frequency"),
-        ("pain_point_frequency.png", "Pain Point Frequency"),
-        ("business_impact.png", "Business Impact Distribution"),
-        ("version_ratings.png", "Version Ratings (1-Star Rate)"),
-        ("issue_lifecycle.png", "Issue Lifecycle Over Time"),
-        ("funnel_dropoff.png", "Funnel Drop-off Points"),
+    gallery_opportunities = insights.get("ranked_ux_opportunities", [])
+    gallery_version_data = insights.get("_version_analysis", {})
+    gallery_funnel = load_json(str(DATA_DIR / f"funnel_analysis{suffix}.json")) or load_json(str(DATA_DIR / "funnel_analysis.json"))
+    gallery_temporal = load_json(str(DATA_DIR / f"temporal_analysis{suffix}.json")) or load_json(str(DATA_DIR / "temporal_analysis.json"))
+
+    chart_specs = [
+        ("Rating Trend Over Time", build_rating_trend_chart()),
+        ("Sentiment Distribution", build_sentiment_distribution_chart()),
+        ("Priority Scores", build_priority_scores_chart(gallery_opportunities)),
+        ("Severity vs Frequency", build_severity_frequency_chart(gallery_opportunities)),
+        ("Pain Point Frequency", build_pain_point_frequency_chart(gallery_temporal)),
+        ("Business Impact Distribution", build_business_impact_chart(gallery_opportunities)),
+        ("Version Ratings", build_version_ratings_chart(
+            gallery_version_data.get("version_stats", []), gallery_version_data.get("baseline", {}))),
+        ("Issue Lifecycle Over Time", build_lifecycle_chart(gallery_temporal)),
+        ("Funnel Drop-off Points", build_funnel_chart((gallery_funnel or {}).get("drop_off_hotspots", []))),
     ]
 
     found_any = False
-    for filename, title in chart_files:
-        path = chart_path(filename)
-        if path.exists():
+    for title, fig in chart_specs:
+        if fig is not None:
             found_any = True
             st.markdown(f"#### {title}")
-            st.image(str(path), use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
             st.divider()
 
     if not found_any:
-        st.warning("No charts found. Run the agent first: `python main.py`")
+        st.warning("No chart data found. Run the agent first: `python main.py`")
 
 
 elif page == "Full Report":
